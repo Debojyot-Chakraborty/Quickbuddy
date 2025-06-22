@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuickBuddy - Local Service Marketplace</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
     <style>
         :root {
             --primary: #7c3aed;
@@ -18,6 +20,10 @@
             --bg: #ffffff;
             --card-bg: #f8fafc;
             --section-bg: #f1f5f9;
+            --success: #10b981;
+            --indigo: #4f46e5;
+            --pink: #ec4899;
+            --teal: #0d9488;
         }
 
         * {
@@ -90,7 +96,7 @@
             font-weight: 600;
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             font-size: 1rem;
             text-align: center;
@@ -104,7 +110,7 @@
 
         .btn-primary:hover {
             background-color: var(--primary-dark);
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.03);
             box-shadow: 0 8px 15px rgba(124, 58, 237, 0.4);
         }
 
@@ -119,6 +125,51 @@
             color: white;
             transform: translateY(-3px);
             box-shadow: 0 8px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+            box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-accent:hover {
+            background-color: var(--accent-light);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-size: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover .feature-icon {
+            transform: rotate(10deg) scale(1.1);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
         }
 
         /* Header */
@@ -220,7 +271,7 @@
             justify-content: center;
             transform: translateY(-100%);
             opacity: 0;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .mobile-nav.active {
@@ -291,6 +342,7 @@
         .hero h1 {
             margin-bottom: 20px;
             line-height: 1.1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .hero p {
@@ -306,18 +358,41 @@
             flex-wrap: wrap;
         }
 
-        /* About Section */
+        .hero-image {
+            position: absolute;
+            right: 0;
+            bottom: -100px;
+            width: 40%;
+            max-width: 500px;
+            z-index: 1;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.2));
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* About App Section */
         .about-app {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 60px;
+            display: flex;
             align-items: center;
+            gap: 60px;
         }
 
         .about-app-image {
+            flex: 1;
             border-radius: 24px;
             overflow: hidden;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            transform: perspective(1000px) rotateY(-10deg);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .about-app-image:hover {
+            transform: perspective(1000px) rotateY(0deg);
         }
 
         .about-app-image img {
@@ -331,6 +406,11 @@
             transform: scale(1.05);
         }
 
+        .about-app-content {
+            flex: 1;
+            padding: 0 20px;
+        }
+
         .features-list {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -339,32 +419,244 @@
         }
 
         .feature-item {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            opacity: 0;
+            transform: translateY(20px);
             transition: all 0.3s ease;
         }
 
         .feature-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
 
-        .feature-icon {
-            width: 70px;
-            height: 70px;
+        /* Features Section */
+        .features-section {
+            text-align: center;
+            background: linear-gradient(to bottom, #f8fafc, #ffffff);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="%237c3aed" opacity="0.05" d="M0,0 L100,0 L100,100 Q50,80 0,100 L0,0 Z"></path></svg>');
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+            background-position: top center;
+            z-index: 0;
+        }
+
+        .features-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .feature-card-icon {
+            width: 80px;
+            height: 80px;
             background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
-            border-radius: 18px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin: 0 auto 25px;
+            font-size: 32px;
             color: var(--primary);
-            font-size: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-card-icon {
+            transform: rotate(10deg) scale(1.1);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+        }
+
+        /* Founder Section */
+        .founder {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border-radius: 24px;
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .founder::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background-color: rgba(124, 58, 237, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .founder::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 300px;
+            height: 300px;
+            background-color: rgba(245, 158, 11, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .founder-image {
+            flex: 1;
+            z-index: 1;
+        }
+
+        .founder-image img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            transition: transform 0.5s ease;
+        }
+
+        .founder-image:hover img {
+            transform: scale(1.03);
+        }
+
+        .founder-content {
+            flex: 1;
+            z-index: 1;
+        }
+
+        .founder-quote {
+            font-style: italic;
+            font-size: 1.2rem;
+            margin: 30px 0;
+            position: relative;
+            padding-left: 25px;
+            border-left: 4px solid var(--accent);
+            color: var(--text);
+        }
+
+        /* Support Section */
+        .support {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--indigo) 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 60px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .support::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .support-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .support h2, .support p {
+            color: white;
+        }
+
+        .support-options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .support-option {
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 300px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .support-option:hover {
+            transform: translateY(-10px) scale(1.03);
+            background-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .support-option img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .support-option:hover img {
+            transform: scale(1.1);
         }
 
         /* Services Section */
+        .services {
+            text-align: center;
+        }
+
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -377,7 +669,8 @@
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .service-card:hover {
@@ -388,6 +681,7 @@
         .service-image {
             height: 200px;
             overflow: hidden;
+            position: relative;
         }
 
         .service-image img {
@@ -401,12 +695,144 @@
             transform: scale(1.1);
         }
 
+        .service-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-card:hover .service-image::after {
+            opacity: 1;
+        }
+
         .service-content {
             padding: 25px;
+            text-align: left;
         }
 
         .service-content h3 {
             color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .service-features li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .service-features li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* Waitlist Section */
+        .waitlist {
+            text-align: center;
+        }
+
+        .waitlist-form {
+            max-width: 600px;
+            margin: 40px auto 0;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .waitlist-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237c3aed' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 12px;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Indian Vibe Elements */
+        .indian-pattern {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .pattern-1 {
+            top: 10%;
+            left: 5%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%237c3aed" d="M50,0 L100,50 L50,100 L0,50 Z"></path></svg>') no-repeat center center;
+            background-size: contain;
+        }
+
+        .pattern-2 {
+            bottom: 10%;
+            right: 5%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle fill="%23f59e0b" cx="50" cy="50" r="50"></circle></svg>') no-repeat center center;
+            background-size: contain;
         }
 
         /* Gen-Z Styling */
@@ -422,89 +848,87 @@
             vertical-align: middle;
         }
 
-        /* Footer */
-        footer {
-            background-color: var(--section-bg);
-            padding: 80px 0 30px;
-        }
-
-        .footer-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-
-        .footer-logo {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .footer-logo span {
-            color: var(--accent);
-        }
-
-        .footer-about p {
-            color: var(--text-light);
-        }
-
-        .footer-links h3 {
-            margin-bottom: 20px;
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .social-links a {
+        .gen-z-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(45deg, var(--pink), var(--primary));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(124, 58, 237, 0.1);
-            color: var(--primary);
-            border-radius: 50%;
-            transition: all 0.3s ease;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1;
         }
 
-        .social-links a:hover {
-            background-color: var(--primary);
-            color: white;
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
         }
 
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            color: var(--text-light);
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide-up {
+            animation: slideUp 1s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
         }
 
         /* Responsive Styles */
         @media (max-width: 992px) {
+            .about-app, .founder {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .about-app-image {
+                transform: none;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .features-list {
+                grid-template-columns: 1fr;
+            }
+
+            .support-option {
+                max-width: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 70px 0;
+            }
+
             .nav-links {
                 display: none;
             }
@@ -513,38 +937,40 @@
                 display: block;
             }
 
-            .about-app {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .features-list {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            section {
-                padding: 60px 0;
-            }
-
             .hero {
                 min-height: 600px;
                 text-align: center;
+                background-position: 60% center;
             }
 
             .hero-content {
                 max-width: 100%;
             }
 
+            .hero-image {
+                display: none;
+            }
+
             .hero-buttons {
                 justify-content: center;
+            }
+
+            .founder {
+                padding: 40px;
+            }
+
+            .support {
+                padding: 50px 20px;
+            }
+
+            .waitlist-form {
+                padding: 30px;
             }
         }
 
         @media (max-width: 576px) {
             section {
-                padding: 50px 0;
+                padding: 60px 0;
             }
 
             .hero {
@@ -567,6 +993,20 @@
             .btn {
                 width: 100%;
             }
+
+            .founder {
+                padding: 30px;
+                flex-direction: column;
+            }
+
+            .support-option {
+                max-width: 100%;
+                padding: 25px;
+            }
+
+            .waitlist-form {
+                padding: 25px;
+            }
         }
     </style>
 </head>
@@ -579,11 +1019,12 @@
                 Quick<span>Buddy</span>
             </a>
             <nav class="nav-links">
-                <a href="#about">About</a>
-                <a href="#services">Services</a>
-                <a href="#founder">Founder</a>
-                <a href="#support">Support</a>
-                <a href="#waitlist">Waitlist</a>
+                <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#services"><i class="fas fa-concierge-bell"></i> Services</a>
+                <a href="#features"><i class="fas fa-star"></i> Features</a>
+                <a href="#founder"><i class="fas fa-user-tie"></i> Founder</a>
+                <a href="#support"><i class="fas fa-hands-helping"></i> Support</a>
+                <a href="#waitlist"><i class="fas fa-clipboard-list"></i> Waitlist</a>
             </nav>
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
@@ -599,6 +1040,7 @@
         <div class="mobile-nav-links">
             <a href="#about"><i class="fas fa-info-circle"></i> About</a>
             <a href="#services"><i class="fas fa-concierge-bell"></i> Services</a>
+            <a href="#features"><i class="fas fa-star"></i> Features</a>
             <a href="#founder"><i class="fas fa-user-tie"></i> Founder</a>
             <a href="#support"><i class="fas fa-hands-helping"></i> Support</a>
             <a href="#waitlist"><i class="fas fa-clipboard-list"></i> Waitlist</a>
@@ -609,17 +1051,20 @@
     <section class="hero" id="home">
         <div class="container">
             <div class="hero-content">
-                <h1>Find Trusted Help in Your Neighborhood <span class="gen-z-tag">NEW</span></h1>
-                <p>QuickBuddy connects you with skilled professionals for all your home and personal service needs. Bharat's first hyperlocal service marketplace! 🇮🇳</p>
+                <h1 class="fade-in">Find Trusted Help in Your Neighborhood <span class="gen-z-tag">NEW</span></h1>
+                <p class="fade-in">QuickBuddy connects you with skilled professionals for all your home and personal service needs. Bharat's first hyperlocal service marketplace! 🇮🇳</p>
                 <div class="hero-buttons">
-                    <a href="#waitlist" class="btn btn-primary"><i class="fas fa-rocket"></i> Join Waitlist</a>
-                    <a href="#support" class="btn btn-outline"><i class="fas fa-hands-helping"></i> Support Us</a>
+                    <a href="#waitlist" class="btn btn-primary slide-up" style="animation-delay: 0.2s;"><i class="fas fa-rocket"></i> Join Waitlist</a>
+                    <a href="#support" class="btn btn-outline slide-up" style="animation-delay: 0.4s;"><i class="fas fa-hands-helping"></i> Support Us</a>
                 </div>
             </div>
+            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="QuickBuddy App Preview" class="hero-image">
         </div>
+        <div class="indian-pattern pattern-1"></div>
+        <div class="indian-pattern pattern-2"></div>
     </section>
 
-    <!-- About Section -->
+    <!-- About App Section -->
     <section class="about-app section section-bg" id="about">
         <div class="container">
             <div class="about-app">
@@ -665,47 +1110,126 @@
         </div>
     </section>
 
+    <!-- Features Section -->
+    <section class="features-section section" id="features">
+        <div class="container features-container">
+            <h2>Why <span class="text-primary">QuickBuddy</span> Stands Out</h2>
+            <p>Designed specifically for Indian Tier 2/3 cities with features you'll love</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Lightweight App</h3>
+                    <p>Works smoothly even on budget smartphones with limited storage and slower networks</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>Regional Languages</h3>
+                    <p>Available in Hindi, Bengali, Tamil, Telugu and more regional languages</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Flexible Payments</h3>
+                    <p>UPI, cash, and other local payment methods accepted</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Local Support</h3>
+                    <p>Dedicated customer support that understands local needs and dialects</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Growth Opportunities</h3>
+                    <p>Service providers can grow their business through our platform</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Safety First</h3>
+                    <p>Verified profiles, service guarantees, and emergency contacts</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Services Section -->
-    <section class="section" id="services">
+    <section class="services section" id="services">
         <div class="container">
             <h2>Our <span class="text-primary">Services</span></h2>
-            <p>From home repairs to personal services, we've got you covered</p>
+            <p>Discover the wide range of services available through QuickBuddy</p>
 
             <div class="services-grid">
+                <!-- Home Repairs -->
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Plumbing Service">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Home Repairs">
                     </div>
                     <div class="service-content">
-                        <h3>Plumbing</h3>
-                        <p>Leaky faucets, clogged drains, pipe repairs - our plumbers can handle it all.</p>
+                        <h3>Home Repairs</h3>
+                        <p>Professional solutions for all your home maintenance needs</p>
+                        <ul class="service-features">
+                            <li>Plumbing services</li>
+                            <li>Electrical repairs</li>
+                            <li>Carpentry work</li>
+                            <li>Appliance fixing</li>
+                            <li>24/7 emergency support</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline"><i class="fas fa-arrow-right"></i> Learn More</a>
                     </div>
                 </div>
+
+                <!-- Beauty Services -->
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Electrical Service">
+                        <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1886&q=80" alt="Beauty Services">
                     </div>
                     <div class="service-content">
-                        <h3>Electrical</h3>
-                        <p>Wiring, switches, fuse problems - get certified electricians at your doorstep.</p>
+                        <h3>Beauty Services</h3>
+                        <p>Professional beauty treatments at your convenience</p>
+                        <ul class="service-features">
+                            <li>Hair styling and cuts</li>
+                            <li>Makeup services</li>
+                            <li>Manicure & pedicure</li>
+                            <li>Skincare treatments</li>
+                            <li>Bridal packages</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline"><i class="fas fa-arrow-right"></i> Learn More</a>
                     </div>
                 </div>
+
+                <!-- More Services -->
                 <div class="service-card">
+                    <div class="gen-z-badge">NEW</div>
                     <div class="service-image">
-                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Cleaning Service">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="More Services">
                     </div>
                     <div class="service-content">
-                        <h3>Home Cleaning</h3>
-                        <p>Professional cleaning services for your home, office or special occasions.</p>
-                    </div>
-                </div>
-                <div class="service-card">
-                    <div class="service-image">
-                        <img src="https://images.unsplash.com/photo-1606744837616-56c9a5c6a6eb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80" alt="Appliance Repair">
-                    </div>
-                    <div class="service-content">
-                        <h3>Appliance Repair</h3>
-                        <p>AC, refrigerator, washing machine - get expert repair services at home.</p>
+                        <h3>More Coming Soon</h3>
+                        <p>We're constantly expanding our service offerings</p>
+                        <ul class="service-features">
+                            <li>Pet care services</li>
+                            <li>Event planning</li>
+                            <li>Personal training</li>
+                            <li>IT support</li>
+                            <li>And many more!</li>
+                        </ul>
+                        <a href="#waitlist" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Request a Service</a>
                     </div>
                 </div>
             </div>
@@ -713,119 +1237,88 @@
     </section>
 
     <!-- Founder Section -->
-    <section class="section section-bg" id="founder">
+    <section class="founder section" id="founder">
         <div class="container">
-            <h2>Our <span class="text-primary">Founder</span></h2>
-            <div class="about-app">
-                <div class="about-app-content">
-                    <h3>Debojyoti Chakrabarty</h3>
-                    <p>"Growing up in West Bengal, I saw firsthand the untapped potential of skilled workers in smaller cities. QuickBuddy is my solution to bridge this gap and create economic opportunities."</p>
-                    <p>As a self-taught developer and entrepreneur, Debojyoti is passionate about building technology that solves real problems for everyday Indians.</p>
-                </div>
-                <div class="about-app-image">
+            <div class="founder">
+                <div class="founder-image">
                     <img src="https://lh3.googleusercontent.com/pw/AP1GczMxfV-Se-pwcKR1uIoJiph7yTXMwuTV_e4aufYRmXD4K_HVZ_HSgcrguqExRDVb_LUB_cRzmiIakgTCoxdzOQ9HdzXD8SdbFxH1MX74jFlO_Ak6HGUmMD94nvtuR_6OUDrhsBOoQNpiKS4L5w9PIDEwDg=w879-h879-s-no?authuser=0" alt="Debojyoti Chakrabarty" loading="lazy">
+                </div>
+                <div class="founder-content">
+                    <h2>Meet <span class="text-primary">Debojyoti Chakrabarty</span></h2>
+                    <blockquote class="founder-quote">
+                        "Growing up in West Bengal, I saw firsthand the untapped potential of skilled workers in smaller cities. QuickBuddy is my solution to bridge this gap and create economic opportunities."
+                    </blockquote>
+                    <p>As a self-taught developer and entrepreneur, Debojyoti is passionate about building technology that solves real problems for everyday Indians. QuickBuddy was born from his vision to empower local communities through technology.</p>
+                    <p>The platform is designed specifically for the needs and challenges of Tier 2/3 cities, where traditional service marketplaces often fall short.</p>
+                    <div class="social-links" style="justify-content: flex-start; margin-top: 30px;">
+                        <a href="https://www.linkedin.com/in/debojyoti-chakrabarty" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Support Section -->
-    <section class="section" id="support">
+    <section class="support section" id="support">
         <div class="container">
-            <h2>Support <span class="text-primary">QuickBuddy</span></h2>
-            <p>Help us bring QuickBuddy to more cities across India</p>
-            
-            <div class="features-list" style="margin-top: 40px;">
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-qrcode"></i>
+            <div class="support-content">
+                <h2>Help Bring QuickBuddy to Your City</h2>
+                <p>Your support helps us launch faster and create more opportunities in Tier 2/3 cities</p>
+                <p class="pulse" style="font-weight: 600; color: white;">Current Goal: ₹25,000 for development and launch</p>
+
+                <div class="support-options">
+                    <div class="support-option">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/UPI-Logo-vector.svg/1200px-UPI-Logo-vector.svg.png" alt="UPI Payment" loading="lazy">
+                        <h3>UPI Payment</h3>
+                        <p>Send to UPI ID: <strong>debojyoti-chakraborty@ptyes</strong></p>
                     </div>
-                    <h3>Scan QR Code</h3>
-                    <p>Use any UPI app to scan and contribute to our development</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-hand-holding-usd"></i>
+                    <div class="support-option">
+                        <img src="https://lh3.googleusercontent.com/pw/AP1GczPOHasYgjKzlvisPDpIVPs3ilbiPr2ASkHwf9clBxH39es9hc0DIv9VcVE9DSt-bj4UmyOwr-935m1SIbk8ko9lsxqpDp1nYqw-HBMz5uGjjkJqXJoJYMBzlWuomiLBIJUzZG0rMf5CYZ7qiT6Jeu129w=w760-h706-s-no?authuser=0" alt="UPI QR Code" loading="lazy">
+                        <h3>Scan QR Code</h3>
+                        <p>Use any UPI app to scan and contribute</p>
                     </div>
-                    <h3>Direct Transfer</h3>
-                    <p>Send to UPI ID: <strong>debojyoti-chakraborty@ptyes</strong></p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Waitlist Section -->
-    <section class="section section-bg" id="waitlist">
+    <section class="waitlist section section-bg" id="waitlist">
         <div class="container">
-            <h2>Join Our <span class="text-primary">Waitlist</span></h2>
-            <p>Be the first to know when we launch in your city</p>
-            
-            <form style="max-width: 500px; margin: 40px auto 0;">
-                <div style="margin-bottom: 20px;">
-                    <label for="name" style="display: block; margin-bottom: 8px; font-weight: 600;">Full Name</label>
-                    <input type="text" id="name" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <h2>Get Early Access to <span class="text-primary">QuickBuddy</span></h2>
+            <p>Be the first to use QuickBuddy in your city and enjoy exclusive benefits</p>
+
+            <form class="waitlist-form" id="waitlistForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" class="form-control" required>
                 </div>
-                <div style="margin-bottom: 20px;">
-                    <label for="email" style="display: block; margin-bottom: 8px; font-weight: 600;">Email</label>
-                    <input type="email" id="email" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" required>
                 </div>
-                <div style="margin-bottom: 20px;">
-                    <label for="city" style="display: block; margin-bottom: 8px; font-weight: 600;">City</label>
-                    <input type="text" id="city" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" class="form-control" required>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-paper-plane"></i> Join Waitlist</button>
+                <div class="form-group">
+                    <label for="type">I want to join as</label>
+                    <select id="type" class="form-control" required>
+                        <option value="">Select an option</option>
+                        <option value="user">User (Looking for services)</option>
+                        <option value="provider">Service Provider (Offer my skills)</option>
+                        <option value="both">Both</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Join Waitlist</button>
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i> Thank you for joining! We'll notify you when we launch in your city.
+                </div>
             </form>
         </div>
     </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-container">
-                <div class="footer-about">
-                    <div class="footer-logo">Quick<span>Buddy</span></div>
-                    <p>A real-time, skill-based local service marketplace targeting Tier 2/3 Indian cities.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-                <div class="footer-links">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#founder">Founder</a></li>
-                        <li><a href="#support">Support</a></li>
-                        <li><a href="#waitlist">Waitlist</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h3>Services</h3>
-                    <ul>
-                        <li><a href="#">Plumbing</a></li>
-                        <li><a href="#">Electrical</a></li>
-                        <li><a href="#">Cleaning</a></li>
-                        <li><a href="#">Appliance Repair</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h3>Contact</h3>
-                    <ul>
-                        <li><a href="mailto:debojyoti200419@gmail.com">debojyoti200419@gmail.com</a></li>
-                        <li><a href="tel:+919474188425">+91 9474188425</a></li>
-                        <li>Kolkata, West Bengal</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2023 QuickBuddy. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
 
     <script>
         // Mobile Menu Toggle
@@ -861,6 +1354,165 @@
             }
         });
 
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero animations
+        gsap.from('.hero h1', {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            ease: 'power3.out'
+        });
+
+        gsap.from('.hero p', {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            delay: 0.2,
+            ease: 'power3.out'
+        });
+
+        gsap.from('.hero-buttons a', {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            delay: 0.4,
+            stagger: 0.2,
+            ease: 'power3.out'
+        });
+
+        gsap.from('.hero-image', {
+            duration: 1.5,
+            x: 100,
+            opacity: 0,
+            delay: 0.6,
+            ease: 'power3.out'
+        });
+
+        // Feature items animation
+        gsap.utils.toArray('.feature-item').forEach((item, i) => {
+            gsap.from(item, {
+                scrollTrigger: {
+                    trigger: item,
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.1,
+                ease: 'power2.out'
+            });
+        });
+
+        // Feature cards animation
+        gsap.utils.toArray('.feature-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.1,
+                ease: 'power2.out'
+            });
+        });
+
+        // Founder section animation
+        gsap.from('.founder-image', {
+            scrollTrigger: {
+                trigger: '.founder',
+                start: 'top 70%',
+                toggleActions: 'play none none none'
+            },
+            x: -100,
+            opacity: 0,
+            duration: 1,
+            ease: 'power2.out'
+        });
+
+        gsap.from('.founder-content', {
+            scrollTrigger: {
+                trigger: '.founder',
+                start: 'top 70%',
+                toggleActions: 'play none none none'
+            },
+            x: 100,
+            opacity: 0,
+            duration: 1,
+            ease: 'power2.out'
+        });
+
+        // Support options animation
+        gsap.utils.toArray('.support-option').forEach((item, i) => {
+            gsap.from(item, {
+                scrollTrigger: {
+                    trigger: item,
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.2,
+                ease: 'power2.out'
+            });
+        });
+
+        // Form submission with email sending
+        const waitlistForm = document.getElementById('waitlistForm');
+        const successMessage = document.getElementById('successMessage');
+
+        waitlistForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                city: document.getElementById('city').value,
+                type: document.getElementById('type').value
+            };
+
+            try {
+                // Using FormSubmit.co to send emails
+                const response = await fetch('https://formsubmit.co/ajax/debojyoti200419@gmail.com', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        email: formData.email,
+                        city: formData.city,
+                        type: formData.type,
+                        _subject: 'New QuickBuddy Waitlist Submission',
+                        _template: 'table'
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    waitlistForm.reset();
+
+                    // Scroll to show the success message
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    throw new Error(result.message || 'Failed to submit form');
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('There was an error submitting the form. Please try again.');
+            }
+        });
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
@@ -877,6 +1529,28 @@
                     });
                 }
             });
+        });
+
+        // Lazy loading for images
+        document.addEventListener('DOMContentLoaded', function() {
+            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src || img.src;
+                            img.removeAttribute('data-src');
+                            observer.unobserve(img);
+                        }
+                    });
+                });
+
+                lazyImages.forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
         });
     </script>
 </body>
